@@ -7,14 +7,19 @@ def resize_image(original_image, scale_percent, background=False):
     # original_image = cv2.imread(image_path)
 
     # Calculate the new dimensions
-    width = int(640 * scale_percent / 100)
+    max_dim = max(original_image.shape[0], original_image.shape[1])
+    max_dim_resize = int(640 * scale_percent / 100)
+    resize_ratio = max_dim / max_dim_resize
     # height = int(original_image.shape[0] * scale_percent / 100)
-    if background:
-        height = int(640 * scale_percent / 100)
-    else:
-        w_h_ratio = original_image.shape[0] / original_image.shape[1]
-        height = int(640 * scale_percent * w_h_ratio / 100)
-    new_dimensions = (width, height)
+
+    # if background:
+    #     height = int(640 * scale_percent / 100)
+    # else:
+    #     w_h_ratio = original_image.shape[0] / original_image.shape[1]
+    #     height = int(640 * scale_percent * w_h_ratio / 100)
+
+    width, height = int(original_image.shape[0] / resize_ratio), int(original_image.shape[1] / resize_ratio)
+    new_dimensions = (height, width)
 
     # Resize the image
     resized_image = cv2.resize(original_image, new_dimensions, interpolation=cv2.INTER_AREA)
@@ -27,6 +32,7 @@ def resize_image(original_image, scale_percent, background=False):
     # cv2.waitKey(0)  # waits until a key is pressed
     # cv2.destroyAllWindows()  # destroys the window showing the image
     return resized_image
+
 
 # Example usage: Resize the image to 50% of its original dimensions
 # resize_image("path_to_your_image.jpg", "output_image.jpg", 50)

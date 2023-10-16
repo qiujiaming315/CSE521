@@ -12,16 +12,16 @@ from lib import synthesize
 # Declare the constants here.
 required_list = ['hot_pad', 'pan', 'oatmeal', 'bowl', 'measure_cup', 'measure_spoon', 'metal_spoon', 'salt',
                  'stirring_spoon', 'timer']
-common_list = ['black_pepper', 'folk', 'knife', 'peeler', 'plate', 'pot', 'scissors']
+common_list = ['black_pepper', 'fork', 'knife', 'peeler', 'plate', 'pot', 'scissors']
 other_list = []
 required_resize_dict = {'bowl': 25, 'hot_pad': 20, 'measure_cup': 20, 'measure_spoon': 20, 'metal_spoon': 18,
                         'oatmeal': 27, 'pan': 35, 'salt': 20, 'stirring_spoon': 26, 'timer': 20}
-common_resize_dict = {'black_pepper': 20, 'folk': 18, 'knife': 20, 'peeler': 18, 'plate': 25,
+common_resize_dict = {'black_pepper': 20, 'fork': 18, 'knife': 20, 'peeler': 18, 'plate': 25,
                       'pot': 35, 'scissors': 20}
 other_resize_dict = {}
 required_label = {'bowl': 0, 'hot_pad': 1, 'measure_cup': 2, 'measure_spoon': 3, 'metal_spoon': 4,
                   'oatmeal': 5, 'pan': 6, 'salt': 7, 'stirring_spoon': 8, 'timer': 9}
-common_label = {'black_pepper': 10, 'folk': 11, 'knife': 12, 'peeler': 13, 'plate': 14, 'pot': 15,
+common_label = {'black_pepper': 10, 'fork': 11, 'knife': 12, 'peeler': 13, 'plate': 14, 'pot': 15,
                 'scissors': 16}
 other_label = 17
 img_formats = ["jpg", "jpeg", "png"]
