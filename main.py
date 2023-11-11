@@ -10,14 +10,14 @@ from lib import synthesize
 """Create synthetic images and bounding box annotations for object detection in a smart kitchen setting."""
 
 # Declare the constants here.
-required_list = ['hot_pad', 'pan', 'oatmeal', 'bowl', 'measuring_cup', 'measuring_spoons', 'small_spoon', 'salt',
-                 'big_spoon', 'timer', 'measuring_cup_glass']
 # required_list = ['hot_pad', 'pan', 'oatmeal', 'bowl', 'measuring_cup', 'measuring_spoons', 'small_spoon', 'salt',
-#                  'big_spoon', 'timer']
-common_list = ['pepper', 'fork', 'knife', 'peeler', 'plate', 'scissors', 'tongs', 'spatula', 'glass']
-# common_list = ['fork', 'knife', 'peeler', 'plate', 'scissors']
-other_list = ['brush', 'keys', 'money', 'phone', 'tissue']
-# other_list = ['brush', 'keys', 'tissue']
+#                  'big_spoon', 'timer', 'measuring_cup_glass']
+required_list = ['hot_pad', 'pan', 'oatmeal', 'bowl', 'measuring_cup', 'measuring_spoons', 'small_spoon', 'salt',
+                 'big_spoon', 'timer']
+# common_list = ['pepper', 'fork', 'knife', 'peeler', 'plate', 'scissors', 'tongs', 'spatula', 'glass']
+common_list = ['fork', 'knife', 'peeler', 'plate', 'scissors']
+# other_list = ['brush', 'keys', 'money', 'phone', 'tissue']
+other_list = ['brush', 'keys', 'tissue']
 required_resize_dict = {'bowl': 25, 'hot_pad': 20, 'measuring_cup': 20, 'measuring_spoons': 20, 'small_spoon': 18,
                         'oatmeal': 27, 'pan': 35, 'salt': 20, 'big_spoon': 26, 'timer': 20, 'measuring_cup_glass': 20}
 common_resize_dict = {'pepper': 20, 'fork': 18, 'knife': 20, 'peeler': 18, 'plate': 25, 'scissors': 20, 'tongs': 25,
@@ -72,7 +72,7 @@ def dataset_generate(args):
                 for obj_img in obj_imgs:
                     # Process the selected object image.
                     obj_crop = image_resize.crop_non_transparent(obj_img)
-                    obj_crop = image_resize.resize_image(obj_crop, obj_resize_dict[obj_name])
+                    obj_crop = image_resize.resize_image(obj_crop, obj_resize_dict[obj_name], rstate)
                     angle = np.random.choice(np.arange(360))
                     obj_crop = image_resize.image_rotate(obj_crop, angle)
                     obj_class = obj_label[obj_name] if isinstance(obj_label, dict) else obj_label
@@ -97,7 +97,7 @@ def dataset_generate(args):
         img_list.extend(other_img_list)
         label_list.extend(other_label_list)
         back_img = retrieve_image(background_path, 1, rstate)[0]
-        back_img = image_resize.resize_image(back_img, 100, background=True)
+        back_img = image_resize.resize_image(back_img, 100, rstate, background=True)
         # Generate the synthetic image.
         synthesize.img_synthesize(back_img, img_list, label_list, out_img_path, out_label_path, sample_idx)
 
