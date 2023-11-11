@@ -1,5 +1,6 @@
 /.gitignore
 /.idea/
 /backup/
+/data_processing/
 /__MACOSX/
 /test/
