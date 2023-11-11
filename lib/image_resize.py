@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 # Object resizing parameters.
-object_resize_noise = 1.5
+object_resize_noise = 0.1
 object_resize_min_percent = 3
 
 
@@ -15,7 +15,7 @@ def resize_image(original_image, scale_percent, random_state, background=False):
     if background:
         resize_ratio = min(original_image.shape[0] / 480, original_image.shape[1] / 640)
     else:
-        scale_percent += (random_state.rand() - 0.5) * 2 * object_resize_noise
+        scale_percent *= 1 + ((random_state.rand() - 0.5) * 2 * object_resize_noise)
         scale_percent = max(object_resize_min_percent, scale_percent)
         max_dim_resize = int(640 * scale_percent / 100)
         resize_ratio = max_dim / max_dim_resize
@@ -26,6 +26,7 @@ def resize_image(original_image, scale_percent, random_state, background=False):
     resized_image = cv2.resize(original_image, new_dimensions, interpolation=cv2.INTER_AREA)
     # Crop background images.
     if background:
+        height, width = max(height, 480), max(width, 640)
         x_start = 0 if width == 640 else random_state.randint(width - 640)
         y_start = 0 if height == 480 else random_state.randint(height - 480)
         resized_image = resized_image[y_start:y_start + 480, x_start:x_start + 640]

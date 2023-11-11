@@ -10,19 +10,15 @@ from lib import synthesize
 """Create synthetic images and bounding box annotations for object detection in a smart kitchen setting."""
 
 # Declare the constants here.
-# required_list = ['hot_pad', 'pan', 'oatmeal', 'bowl', 'measuring_cup', 'measuring_spoons', 'small_spoon', 'salt',
-#                  'big_spoon', 'timer', 'measuring_cup_glass']
 required_list = ['hot_pad', 'pan', 'oatmeal', 'bowl', 'measuring_cup', 'measuring_spoons', 'small_spoon', 'salt',
-                 'big_spoon', 'timer']
-# common_list = ['pepper', 'fork', 'knife', 'peeler', 'plate', 'scissors', 'tongs', 'spatula', 'glass']
-common_list = ['fork', 'knife', 'peeler', 'plate', 'scissors']
-# other_list = ['brush', 'keys', 'money', 'phone', 'tissue']
-other_list = ['brush', 'keys', 'tissue']
-required_resize_dict = {'bowl': 25, 'hot_pad': 20, 'measuring_cup': 20, 'measuring_spoons': 20, 'small_spoon': 18,
-                        'oatmeal': 27, 'pan': 35, 'salt': 20, 'big_spoon': 26, 'timer': 20, 'measuring_cup_glass': 20}
-common_resize_dict = {'pepper': 20, 'fork': 18, 'knife': 20, 'peeler': 18, 'plate': 25, 'scissors': 20, 'tongs': 25,
-                      'spatula': 20, 'glass': 18}
-other_resize_dict = {'brush': 18, 'keys': 12, 'money': 15, 'phone': 15, 'tissue': 18}
+                 'big_spoon', 'timer', 'measuring_cup_glass']
+common_list = ['pepper', 'fork', 'knife', 'peeler', 'plate', 'scissors', 'tongs', 'spatula', 'glass']
+other_list = ['brush', 'keys', 'money', 'phone', 'tissue']
+required_resize_dict = {'bowl': 18, 'hot_pad': 20, 'measuring_cup': 10, 'measuring_spoons': 10, 'small_spoon': 12,
+                        'oatmeal': 18, 'pan': 40, 'salt': 12, 'big_spoon': 25, 'timer': 8, 'measuring_cup_glass': 20}
+common_resize_dict = {'pepper': 12, 'fork': 12, 'knife': 15, 'peeler': 12, 'plate': 25, 'scissors': 14, 'tongs': 20,
+                      'spatula': 30, 'glass': 10}
+other_resize_dict = {'brush': 12, 'keys': 10, 'money': 10, 'phone': 10, 'tissue': 25}
 required_label = {'bowl': 0, 'hot_pad': 1, 'measuring_cup': 2, 'measuring_spoons': 3, 'small_spoon': 4,
                   'oatmeal': 5, 'pan': 6, 'salt': 7, 'big_spoon': 8, 'timer': 9, 'measuring_cup_glass': 10}
 common_label = {'pepper': 11, 'fork': 12, 'knife': 13, 'peeler': 14, 'plate': 15, 'scissors': 16, 'tongs': 17,
@@ -99,7 +95,7 @@ def dataset_generate(args):
         back_img = retrieve_image(background_path, 1, rstate)[0]
         back_img = image_resize.resize_image(back_img, 100, rstate, background=True)
         # Generate the synthetic image.
-        synthesize.img_synthesize(back_img, img_list, label_list, out_img_path, out_label_path, sample_idx)
+        synthesize.img_synthesize(back_img, img_list, label_list, out_img_path, out_label_path, sample_idx + 1)
 
 
 def getargs():
@@ -115,7 +111,7 @@ def getargs():
                       help="Probability that each category of required items appears in the generated image.")
     args.add_argument('--common-prob', type=float, default=0.2,
                       help="Probability that each category of common distractors appears in the generated image.")
-    args.add_argument('--other-prob', type=float, default=0.05,
+    args.add_argument('--other-prob', type=float, default=0.2,
                       help="Probability that each category of other distractors appears in the generated image.")
     args.add_argument('--reoccur-prob', type=float, default=0.1,
                       help="Probability that the same category of objects reappears in the generated image.")
