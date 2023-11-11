@@ -11,21 +11,23 @@ from lib import synthesize
 
 # Declare the constants here.
 required_list = ['hot_pad', 'pan', 'oatmeal', 'bowl', 'measuring_cup', 'measuring_spoons', 'small_spoon', 'salt',
-                 'big_spoon', 'timer']
+                 'big_spoon', 'timer', 'measuring_cup_glass']
+# required_list = ['hot_pad', 'pan', 'oatmeal', 'bowl', 'measuring_cup', 'measuring_spoons', 'small_spoon', 'salt',
+#                  'big_spoon', 'timer']
 common_list = ['pepper', 'fork', 'knife', 'peeler', 'plate', 'scissors', 'tongs', 'spatula', 'glass', 'phone']
 # common_list = ['fork', 'knife', 'peeler', 'plate', 'scissors']
 other_list = ['brush', 'keys', 'money', 'phone', 'tissue']
 # other_list = ['brush', 'keys', 'tissue']
 required_resize_dict = {'bowl': 25, 'hot_pad': 20, 'measuring_cup': 20, 'measuring_spoons': 20, 'small_spoon': 18,
-                        'oatmeal': 27, 'pan': 35, 'salt': 20, 'big_spoon': 26, 'timer': 20}
+                        'oatmeal': 27, 'pan': 35, 'salt': 20, 'big_spoon': 26, 'timer': 20, 'measuring_cup_glass': 20}
 common_resize_dict = {'pepper': 20, 'fork': 18, 'knife': 20, 'peeler': 18, 'plate': 25, 'scissors': 20, 'tongs': 25,
                       'spatula': 20, 'glass': 18, 'phone': 18}
 other_resize_dict = {'brush': 18, 'keys': 12, 'money': 15, 'phone': 15, 'tissue': 18}
 required_label = {'bowl': 0, 'hot_pad': 1, 'measuring_cup': 2, 'measuring_spoons': 3, 'small_spoon': 4,
-                  'oatmeal': 5, 'pan': 6, 'salt': 7, 'big_spoon': 8, 'timer': 9}
-common_label = {'pepper': 10, 'fork': 11, 'knife': 12, 'peeler': 13, 'plate': 14, 'scissors': 15, 'tongs': 16,
-                'spatula': 17, 'glass': 18, 'phone': 19}
-other_label = 20
+                  'oatmeal': 5, 'pan': 6, 'salt': 7, 'big_spoon': 8, 'timer': 9, 'measuring_cup_glass': 10}
+common_label = {'pepper': 11, 'fork': 12, 'knife': 13, 'peeler': 14, 'plate': 15, 'scissors': 16, 'tongs': 17,
+                'spatula': 18, 'glass': 19, 'phone': 20}
+other_label = 21
 img_formats = ["jpg", "jpeg", "png"]
 
 
