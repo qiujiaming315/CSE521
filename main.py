@@ -18,7 +18,7 @@ required_resize_dict = {'bowl': 18, 'hot_pad': 20, 'measuring_cup': 10, 'measuri
                         'oatmeal': 18, 'pan': 40, 'salt': 12, 'big_spoon': 25, 'timer': 8, 'measuring_cup_glass': 20}
 common_resize_dict = {'pepper': 12, 'fork': 12, 'knife': 15, 'peeler': 12, 'plate': 25, 'scissors': 14, 'tongs': 20,
                       'spatula': 30, 'glass': 10}
-other_resize_dict = {'brush': 12, 'keys': 10, 'money': 10, 'phone': 10, 'tissue': 25}
+other_resize_dict = {'brush': 12, 'keys': 10, 'money': 10, 'phone': 12, 'tissue': 25}
 required_label = {'bowl': 0, 'hot_pad': 1, 'measuring_cup': 2, 'measuring_spoons': 3, 'small_spoon': 4,
                   'oatmeal': 5, 'pan': 6, 'salt': 7, 'big_spoon': 8, 'timer': 9, 'measuring_cup_glass': 10}
 common_label = {'pepper': 11, 'fork': 12, 'knife': 13, 'peeler': 14, 'plate': 15, 'scissors': 16, 'tongs': 17,
