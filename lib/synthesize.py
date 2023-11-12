@@ -3,6 +3,11 @@ import numpy as np
 import os
 import random
 
+# Parameters that control overlapping objects.
+max_overlap = 0.2
+container_objects = [1]
+max_attempts = 10
+
 
 # Function to overlay transparent objects on background
 def overlay_transparent(background_img, overlay_img, x, y):
@@ -12,9 +17,9 @@ def overlay_transparent(background_img, overlay_img, x, y):
     background_alpha = 1.0 - overlay_alpha
 
     for c in range(3):
-        color = np.expand_dims(background_img[y:y+h, x:x+w, c], axis=-1) * (background_alpha)\
+        color = np.expand_dims(background_img[y:y + h, x:x + w, c], axis=-1) * (background_alpha) \
                 + np.expand_dims(overlay_img[:, :, c], axis=-1) * (overlay_alpha)
-        background_img[y:y+h, x:x+w, c] = color.squeeze()
+        background_img[y:y + h, x:x + w, c] = color.squeeze()
 
     return background_img
 
@@ -31,7 +36,7 @@ def calculate_intersection_area(box1, box2):
     return interArea
 
 
-def is_acceptable_overlap(box1, box2, max_overlap=0.2):
+def is_acceptable_overlap(box1, box2):
     interArea = calculate_intersection_area(box1, box2)
     box1_area = box1['width'] * box1['height']
     box2_area = box2['width'] * box2['height']
@@ -60,11 +65,9 @@ def img_synthesize(background, obj_list, class_list, output_images_dir, output_l
     num_objects = len(obj_list)
     annotations = []
     bound_hist = []
-    
+
     for i, obj_cur in enumerate(obj_list):
         # Random position for object
-        max_attempts = 10
-
         for j in range(max_attempts):
             x = random.randint(0, img_width - obj_cur.shape[1])
             y = random.randint(0, img_height - obj_cur.shape[0])
@@ -77,7 +80,7 @@ def img_synthesize(background, obj_list, class_list, output_images_dir, output_l
             cur_obj_bound = {'x': x, 'y': y, 'width': obj_width, 'height': obj_width}
             if place_object(bound_hist, cur_obj_bound):
                 overlay_transparent(background, obj_cur, x, y)
-                if class_list[i] not in [18, 20, 40]:
+                if class_list[i] not in container_objects:
                     # assume class 'hot pad', 'pot', and 'bowl' can be overlapped
                     bound_hist.append(cur_obj_bound)
 
@@ -99,4 +102,3 @@ def img_synthesize(background, obj_list, class_list, output_images_dir, output_l
     with open(output_label_path, 'w') as f:
         for annotation in annotations:
             f.write("%s\n" % annotation)
-
