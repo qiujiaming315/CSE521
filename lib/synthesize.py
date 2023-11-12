@@ -77,7 +77,8 @@ def img_synthesize(background, obj_list, class_list, output_images_dir, output_l
             cur_obj_bound = {'x': x, 'y': y, 'width': obj_width, 'height': obj_width}
             if place_object(bound_hist, cur_obj_bound):
                 overlay_transparent(background, obj_cur, x, y)
-                if class_list[i] not in [0, 1, 6]:
+                if class_list[i] not in [18, 20, 40]:
+                    # assume class 'hot pad', 'pot', and 'bowl' can be overlapped
                     bound_hist.append(cur_obj_bound)
 
                 # Normalize coordinates by image dimensions
