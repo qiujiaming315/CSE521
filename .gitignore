@@ -1,4 +1,5 @@
 /.gitignore
+/kitchen.yaml
 /.idea/
 /backup/
 /data_processing/
