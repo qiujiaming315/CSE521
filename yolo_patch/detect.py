@@ -45,6 +45,7 @@ ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 from ultralytics.utils.plotting import Annotator, save_one_box
 from color_palette import colors
+from voice import save_items
 
 from models.common import DetectMultiBackend
 from utils.dataloaders import IMG_FORMATS, VID_FORMATS, LoadImages, LoadScreenshots, LoadStreams
@@ -58,6 +59,7 @@ def run(
         weights=ROOT / 'yolov5s.pt',  # model path or triton URL
         source=ROOT / 'data/images',  # file/dir/URL/glob/screen/0(webcam)
         data=ROOT / 'data/coco128.yaml',  # dataset.yaml path
+        det_path=ROOT / 'voice.txt',  # save detections for voice service
         imgsz=(640, 640),  # inference size (height, width)
         conf_thres=0.25,  # confidence threshold
         iou_thres=0.45,  # NMS IOU threshold
@@ -135,7 +137,8 @@ def run(
 
         # NMS
         with dt[2]:
-            pred, obj_score = non_max_suppression1(pred, 0.01, iou_thres, classes, agnostic_nms, max_det=max_det)
+            pred, obj_score = non_max_suppression1(pred, 0.01, conf_thres, iou_thres, classes, agnostic_nms,
+                                                   max_det=max_det)
         # Detect open-world distractor
         for i, (det, obj) in enumerate(zip(pred, obj_score)):
             assert len(det) == len(obj), "Inconsistent number of detections and objectness scores."
@@ -148,6 +151,14 @@ def run(
             det[distractor_mask2, 5] = len(names) - 1
             detection_mask = torch.logical_or(torch.logical_or(detect_mask, distractor_mask1), distractor_mask2)
             pred[i] = det[detection_mask]
+            # Save the detection results
+            det_cls = pred[i][:, 5]
+            num_dist = torch.sum(det_cls == len(names) - 1)
+            det_cls = det_cls[det_cls != len(names) - 1]
+            det_cls = torch.unique(det_cls)
+            det_names = [names[int(c)] for c in det_cls]
+            det_names.append(str(int(num_dist)))
+            save_items(det_path, det_names)
 
         # Second-stage classifier (optional)
         # pred = utils.general.apply_classifier(pred, classifier_model, im, im0s)
@@ -259,10 +270,11 @@ def parse_opt():
     parser.add_argument('--weights', nargs='+', type=str, default=ROOT / 'yolov5s.pt', help='model path or triton URL')
     parser.add_argument('--source', type=str, default=ROOT / 'data/images', help='file/dir/URL/glob/screen/0(webcam)')
     parser.add_argument('--data', type=str, default=ROOT / 'data/coco128.yaml', help='(optional) dataset.yaml path')
+    parser.add_argument('--det-path', type=str, default=ROOT / 'voice.txt', help='save detections for voice service')
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')
-    parser.add_argument('--conf-thres', type=float, default=0.25, help='confidence threshold')
+    parser.add_argument('--conf-thres', type=float, default=0.5, help='confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.45, help='NMS IoU threshold')
-    parser.add_argument('--dist-thres', type=float, default=0.1, help='distractor threshold')
+    parser.add_argument('--dist-thres', type=float, default=0.4, help='distractor threshold')
     parser.add_argument('--obj-thres', type=float, default=0.6, help='objectness threshold')
     parser.add_argument('--max-det', type=int, default=1000, help='maximum detections per image')
     parser.add_argument('--device', default='', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')

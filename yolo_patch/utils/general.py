@@ -978,7 +978,8 @@ def non_max_suppression(
 
 def non_max_suppression1(
         prediction,
-        conf_thres=0.25,
+        conf_thres=0.01,
+        conf_thresh1=0.5,
         iou_thres=0.45,
         classes=None,
         agnostic=False,
@@ -1072,7 +1073,10 @@ def non_max_suppression1(
         x, o = x[conf_mask], o[conf_mask]  # sort by confidence and remove excess boxes
 
         # Batched NMS
-        c = x[:, 5:6] * (0 if agnostic else max_wh)  # classes
+        nms_cls = x[:, 5:6]
+        # Do not distinguish the distractors
+        nms_cls[x[:, 4] < conf_thresh1] = nc - 1
+        c = nms_cls * (0 if agnostic else max_wh)  # classes
         boxes, scores = x[:, :4] + c, x[:, 4]  # boxes (offset by class), scores
         i = torchvision.ops.nms(boxes, scores, iou_thres)  # NMS
         i = i[:max_det]  # limit detections
